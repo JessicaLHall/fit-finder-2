@@ -6,19 +6,19 @@
   <title>Fit Finder</title>
   <style>
     :root {
-      --bg: #0d0d12;
-      --surface: #16161e;
-      --border: #2a2a38;
-      --accent: #7c6cfc;
-      --accent-dim: #5a4de0;
-      --text: #e8e8f0;
-      --text-muted: #8888a8;
-      --green: #22c55e;
-      --amber: #f59e0b;
-      --red: #ef4444;
-      --green-bg: rgba(34,197,94,0.08);
-      --amber-bg: rgba(245,158,11,0.08);
-      --red-bg: rgba(239,68,68,0.08);
+      --bg: #09090e;
+      --surface: #111118;
+      --surface-2: #16161e;
+      --border: #1f1f2e;
+      --border-mid: #2a2a3a;
+      --accent: #c9a96e;
+      --accent-dim: #a8863f;
+      --text: #f0f0f6;
+      --text-muted: #80809a;
+      --text-dim: #48485e;
+      --green: #4ade80;
+      --amber: #fbbf24;
+      --red: #f87171;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -28,92 +28,106 @@
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       min-height: 100vh;
-      padding: 2.5rem 1rem 4rem;
+      padding: 3rem 1rem 5rem;
     }
 
     .container {
-      max-width: 620px;
+      max-width: 580px;
       margin: 0 auto;
     }
 
-    h1 {
-      font-size: 1.75rem;
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      margin-bottom: 0.3rem;
+    /* Header */
+    .header {
+      margin-bottom: 2.5rem;
     }
 
-    .subtitle {
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--text);
+      margin-bottom: 0.35rem;
+    }
+
+    .header h1 span {
+      color: var(--accent);
+    }
+
+    .header p {
       color: var(--text-muted);
       font-size: 0.9rem;
-      margin-bottom: 2rem;
     }
 
     /* Cards */
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 1.5rem;
-      margin-bottom: 1.25rem;
+      border-radius: 16px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
     }
 
     .card-title {
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--text-muted);
-      margin-bottom: 1.25rem;
+      letter-spacing: 0.12em;
+      color: var(--text-dim);
+      margin-bottom: 1rem;
     }
 
     /* Number inputs */
     .input-grid {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      gap: 0.875rem;
-      margin-bottom: 1.25rem;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
     }
 
     .input-group label {
       display: block;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       color: var(--text-muted);
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.35rem;
     }
 
-    .input-group label span {
-      font-size: 0.68rem;
-      opacity: 0.55;
+    .input-group label em {
+      font-style: normal;
+      font-size: 0.65rem;
+      color: var(--text-dim);
     }
 
     .input-group input {
       width: 100%;
       background: var(--bg);
-      border: 1px solid var(--border);
+      border: 1px solid var(--border-mid);
       border-radius: 8px;
-      padding: 0.6rem 0.75rem;
+      padding: 0.55rem 0.7rem;
       color: var(--text);
-      font-size: 1rem;
+      font-size: 0.95rem;
       outline: none;
       transition: border-color 0.15s;
       -moz-appearance: textfield;
     }
 
     .input-group input::-webkit-outer-spin-button,
-    .input-group input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-    }
+    .input-group input::-webkit-inner-spin-button { -webkit-appearance: none; }
 
     .input-group input:focus { border-color: var(--accent); }
-    .input-group input::placeholder { color: var(--text-muted); opacity: 0.4; }
+    .input-group input::placeholder { color: var(--text-dim); }
 
     /* Toggle rows */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 0.875rem 0;
+    }
+
     .toggle-row {
       display: flex;
       align-items: center;
-      gap: 0.875rem;
-      margin-bottom: 0.7rem;
+      justify-content: space-between;
+      margin-bottom: 0.6rem;
     }
 
     .toggle-row:last-child { margin-bottom: 0; }
@@ -121,25 +135,23 @@
     .toggle-label {
       font-size: 0.8rem;
       color: var(--text-muted);
-      width: 90px;
-      flex-shrink: 0;
     }
 
     .toggle-group {
       display: flex;
-      gap: 0.3rem;
+      gap: 0.25rem;
     }
 
     .toggle-btn {
-      background: var(--bg);
-      border: 1px solid var(--border);
+      background: transparent;
+      border: 1px solid var(--border-mid);
       border-radius: 6px;
       color: var(--text-muted);
       cursor: pointer;
-      font-size: 0.8rem;
-      padding: 0.35rem 0.8rem;
+      font-size: 0.78rem;
+      padding: 0.3rem 0.75rem;
       transition: all 0.12s;
-      line-height: 1.4;
+      line-height: 1.5;
     }
 
     .toggle-btn:hover {
@@ -148,205 +160,191 @@
     }
 
     .toggle-btn.active {
-      background: var(--accent);
       border-color: var(--accent);
-      color: #fff;
+      color: var(--accent);
       font-weight: 600;
     }
 
     /* Search */
     .search-row {
       display: flex;
-      gap: 0.75rem;
+      gap: 0.6rem;
     }
 
     .search-row input {
       flex: 1;
       background: var(--bg);
-      border: 1px solid var(--border);
+      border: 1px solid var(--border-mid);
       border-radius: 8px;
-      padding: 0.7rem 1rem;
+      padding: 0.7rem 0.9rem;
       color: var(--text);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       outline: none;
       transition: border-color 0.15s;
     }
 
     .search-row input:focus { border-color: var(--accent); }
-    .search-row input::placeholder { color: var(--text-muted); opacity: 0.4; }
+    .search-row input::placeholder { color: var(--text-dim); }
 
     .search-btn {
       background: var(--accent);
       border: none;
       border-radius: 8px;
-      color: #fff;
+      color: #1a1206;
       cursor: pointer;
-      font-size: 0.875rem;
-      font-weight: 700;
-      padding: 0.7rem 1.25rem;
+      font-size: 0.83rem;
+      font-weight: 800;
+      padding: 0.7rem 1.1rem;
       transition: background 0.15s;
       white-space: nowrap;
+      letter-spacing: 0.01em;
     }
 
-    .search-btn:hover { background: var(--accent-dim); }
-
-    .search-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
+    .search-btn:hover { background: var(--accent-dim); color: #fff; }
+    .search-btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
     /* Results */
     #results { display: none; }
     #results.visible { display: block; }
 
     .result-shoe-name {
-      font-size: 1.3rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
+      font-size: 1.45rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.25;
       margin-bottom: 0.4rem;
-      line-height: 1.3;
+    }
+
+    .result-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
     }
 
     .result-category {
-      display: inline-block;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 5px;
-      font-size: 0.72rem;
-      padding: 0.2rem 0.6rem;
-      color: var(--text-muted);
-      text-transform: capitalize;
-      margin-bottom: 1.5rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
     }
 
-    /* Fit metrics grid */
+    /* Fit metrics */
     .metrics-label {
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--text-muted);
-      margin-bottom: 0.75rem;
+      letter-spacing: 0.12em;
+      color: var(--text-dim);
+      margin-bottom: 0.6rem;
     }
 
     .fit-metrics {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      gap: 0.75rem;
+      gap: 0.6rem;
       margin-bottom: 1.25rem;
     }
 
     .fit-metric {
-      border-radius: 10px;
-      padding: 1rem 0.875rem;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-top: 3px solid transparent;
+      border-radius: 8px;
+      padding: 0.875rem 0.75rem 0.75rem;
       text-align: center;
     }
 
-    .fit-metric.green { background: var(--green-bg); border: 1px solid rgba(34,197,94,0.35); }
-    .fit-metric.amber { background: var(--amber-bg); border: 1px solid rgba(245,158,11,0.35); }
-    .fit-metric.red   { background: var(--red-bg);   border: 1px solid rgba(239,68,68,0.35); }
-    .fit-metric.na    { background: var(--bg);        border: 1px solid var(--border); opacity: 0.45; }
+    .fit-metric.green { border-top-color: var(--green); }
+    .fit-metric.amber { border-top-color: var(--amber); }
+    .fit-metric.red   { border-top-color: var(--red); }
+    .fit-metric.na    { opacity: 0.35; }
 
     .metric-label {
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-muted);
-      margin-bottom: 0.5rem;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+      margin-bottom: 0.45rem;
     }
 
     .metric-rec {
       font-size: 1rem;
       font-weight: 700;
+      color: var(--text);
       margin-bottom: 0.3rem;
       font-variant-numeric: tabular-nums;
       line-height: 1.3;
     }
 
     .metric-status {
-      font-size: 0.72rem;
+      font-size: 0.68rem;
       font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
     }
 
     .metric-status.green { color: var(--green); }
     .metric-status.amber { color: var(--amber); }
     .metric-status.red   { color: var(--red); }
-    .metric-status.na    { color: var(--text-muted); }
+    .metric-status.na    { color: var(--text-dim); }
 
-    /* Verdict banner */
-    .verdict-banner {
-      border-radius: 8px;
-      padding: 0.875rem 1rem;
+    /* Verdict */
+    .verdict-row {
       display: flex;
       align-items: flex-start;
-      gap: 0.75rem;
-      margin-bottom: 1.25rem;
+      gap: 0.65rem;
+      padding: 0.875rem 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.1rem;
     }
 
-    .verdict-banner.good       { background: var(--green-bg); border: 1px solid rgba(34,197,94,0.4); }
-    .verdict-banner.likely     { background: var(--green-bg); border: 1px solid rgba(34,197,94,0.2); }
-    .verdict-banner.borderline { background: var(--amber-bg); border: 1px solid rgba(245,158,11,0.4); }
-    .verdict-banner.poor       { background: var(--red-bg);   border: 1px solid rgba(239,68,68,0.4); }
-    .verdict-banner.unknown    { background: var(--bg);        border: 1px solid var(--border); }
-
-    .verdict-dot {
-      width: 9px;
-      height: 9px;
+    .verdict-pip {
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       flex-shrink: 0;
-      margin-top: 0.3rem;
+      margin-top: 0.35rem;
     }
 
-    .verdict-dot.good,
-    .verdict-dot.likely     { background: var(--green); }
-    .verdict-dot.borderline { background: var(--amber); }
-    .verdict-dot.poor       { background: var(--red); }
-    .verdict-dot.unknown    { background: var(--text-muted); }
+    .verdict-pip.good,
+    .verdict-pip.likely     { background: var(--green); }
+    .verdict-pip.borderline { background: var(--amber); }
+    .verdict-pip.poor       { background: var(--red); }
+    .verdict-pip.unknown    { background: var(--text-dim); }
 
-    .verdict-text { font-size: 0.875rem; line-height: 1.5; }
-    .verdict-text strong { font-weight: 700; }
+    .verdict-copy { font-size: 0.875rem; line-height: 1.55; color: var(--text-muted); }
+    .verdict-copy strong { color: var(--text); font-weight: 700; }
 
     /* Notes */
-    .notes-title {
-      font-size: 0.7rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--text-muted);
-      margin-bottom: 0.75rem;
-    }
-
     .notes-list {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.45rem;
     }
 
     .notes-list li {
-      font-size: 0.875rem;
+      font-size: 0.85rem;
       color: var(--text-muted);
-      padding-left: 1.25rem;
+      padding-left: 1.1rem;
       position: relative;
-      line-height: 1.55;
+      line-height: 1.6;
     }
 
     .notes-list li::before {
-      content: '·';
+      content: '–';
       position: absolute;
-      left: 0.3rem;
+      left: 0;
       color: var(--accent);
-      font-size: 1rem;
     }
 
     /* Loading */
     .loading {
       text-align: center;
       color: var(--text-muted);
-      padding: 1.75rem;
-      font-size: 0.9rem;
+      padding: 2rem;
+      font-size: 0.875rem;
     }
 
     .loading-dots::after {
@@ -364,18 +362,18 @@
     /* Error */
     .error-msg {
       color: var(--red);
-      font-size: 0.875rem;
-      padding: 0.875rem 1rem;
-      background: var(--red-bg);
-      border: 1px solid rgba(239,68,68,0.35);
-      border-radius: 8px;
+      font-size: 0.85rem;
+      line-height: 1.5;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Fit Finder</h1>
-    <p class="subtitle">Your foot profile, any shoe.</p>
+
+    <div class="header">
+      <h1>Fit <span>Finder</span></h1>
+      <p>Tell us about your feet. We'll tell you how a shoe fits.</p>
+    </div>
 
     <div class="card">
       <div class="card-title">Your Foot Profile</div>
@@ -389,10 +387,11 @@
           <input type="number" id="foot-width" placeholder="e.g. 95" min="60" max="130">
         </div>
         <div class="input-group">
-          <label>Circumference (mm) <span>optional</span></label>
+          <label>Circumference <em>optional</em></label>
           <input type="number" id="foot-circ" placeholder="e.g. 235" min="180" max="310">
         </div>
       </div>
+      <div class="divider"></div>
       <div class="toggle-row">
         <span class="toggle-label">Longest toe</span>
         <div class="toggle-group" id="tg-toe">
@@ -420,19 +419,20 @@
     </div>
 
     <div class="card">
-      <div class="card-title">Find a Shoe</div>
+      <div class="card-title">Search a Shoe</div>
       <div class="search-row">
         <input
           type="text"
           id="shoe-query"
-          placeholder="e.g. Nike Air Max 90, Clarks Desert Boot…"
+          placeholder="Brand and model — e.g. Nike Air Max 90"
           autocomplete="off"
         >
-        <button class="search-btn" id="search-btn">Find Fit</button>
+        <button class="search-btn" id="search-btn">Find My Fit</button>
       </div>
     </div>
 
     <div id="results"></div>
+
   </div>
 
   <script>
@@ -509,7 +509,7 @@
 
       const profile = getProfile();
       if (!profile.footLen || !profile.footWidth) {
-        showError('Please enter your foot length and width before searching.');
+        showError('Pop your foot length and width in above before searching.');
         return;
       }
 
@@ -530,15 +530,15 @@
         const shoe = await resp.json();
 
         if (shoe.error) {
-          showError(shoe.error);
+          showError("We couldn't find that shoe in our database. Try including the brand name, e.g. "Nike Air Max 90".");
         } else {
           showResults(shoe, profile);
         }
       } catch (e) {
-        showError('Could not look up this shoe. Please check your connection and try again.');
+        showError('Something went wrong looking that up — please check your connection and try again.');
       } finally {
         btn.disabled = false;
-        btn.textContent = 'Find Fit';
+        btn.textContent = 'Find My Fit';
       }
     }
 
@@ -600,8 +600,7 @@
       const thumbSpace = (shoe.category === 'heels') ? 8 : 10;
       const fitted = footLen + thumbSpace;
       const step = shoe.halfSizes === false ? 1 : 0.5;
-      let eu = fitted / 6.67;
-      let rounded = Math.round(eu / step) * step;
+      let rounded = Math.round((fitted / 6.67) / step) * step;
       if (shoe.sizing === 'runs_small') rounded += step;
       if (shoe.sizing === 'runs_large') rounded -= step;
       return 'EU\u00a0' + rounded;
@@ -609,29 +608,29 @@
 
     function buildNotes(shoe, profile) {
       const notes = [];
-      if (shoe.sizing === 'runs_small') notes.push('Sized up — these shoes are known to come up small.');
-      if (shoe.sizing === 'runs_large') notes.push('Sized down — these shoes are known to come up large.');
+      if (shoe.sizing === 'runs_small') notes.push('We\'ve recommended a size up — this shoe is known to come up small.');
+      if (shoe.sizing === 'runs_large') notes.push('We\'ve recommended a size down — this shoe tends to run large.');
       if (shoe.fitNote) notes.push(shoe.fitNote);
 
       const { longestToe, archType, heelWidth } = profile;
 
       if (shoe.toeBoxShape === 'tapered' && (longestToe === 'second' || longestToe === 'even')) {
-        notes.push('Tapered toe box may feel tight — consider sizing up or a wide option if available.');
+        notes.push('The tapered toe box may feel snug for your toe shape — a wide option or half size up could help.');
       }
       if (shoe.toeBoxShape === 'round' && longestToe === 'big') {
-        notes.push('Round toe box provides good room for a prominent big toe.');
+        notes.push('The round toe box should give your big toe plenty of room.');
       }
       if (archType === 'high' && (shoe.archSupport === 'neutral' || shoe.archSupport === 'mild')) {
-        notes.push('Low arch support — consider an aftermarket insole for high arches.');
+        notes.push('This shoe has minimal arch support — an aftermarket insole may be worth considering.');
       }
       if (archType === 'low' && shoe.archSupport === 'high') {
-        notes.push('High arch support may feel uncomfortable for flat feet.');
+        notes.push('The built-in arch support is quite pronounced, which can feel uncomfortable on flatter feet.');
       }
       if (heelWidth === 'narrow' && shoe.heelCupDepth === 'shallow') {
-        notes.push('Shallow heel cup may cause slipping with a narrow heel.');
+        notes.push('A shallow heel cup can cause slipping if you have a narrow heel — look for a more structured counter.');
       }
       if (heelWidth === 'wide' && shoe.heelCupDepth === 'deep') {
-        notes.push('Deep heel cup may feel restrictive for a wider heel.');
+        notes.push('The deep heel cup may feel tight around a wider heel.');
       }
       return notes;
     }
@@ -639,22 +638,22 @@
     // ── Render ───────────────────────────────────────────────────────────────
 
     const VERDICT_LABEL = {
-      good: 'Good fit',
-      likely: 'Likely fit',
-      borderline: 'Borderline',
-      poor: 'Poor fit',
-      unknown: 'Unknown',
+      good:       'Looks like a great fit',
+      likely:     'Should fit you well',
+      borderline: 'Worth trying in store',
+      poor:       'Unlikely to be your fit',
+      unknown:    'Not enough data to say',
     };
 
     const VERDICT_DESC = {
-      good:       'All dimensions are within range.',
-      likely:     'Mostly within range — minor fit adjustment may be needed.',
-      borderline: 'Multiple dimensions are marginal — try before buying.',
-      poor:       'One or more dimensions fall outside range for your foot.',
-      unknown:    'Insufficient data to determine fit.',
+      good:       'All three dimensions sit comfortably within range for your foot.',
+      likely:     'Mostly within range — you may want to try them on before committing.',
+      borderline: 'A couple of dimensions are marginal. We\'d recommend trying before buying.',
+      poor:       'One or more dimensions fall outside what would work for your foot.',
+      unknown:    'We don\'t have enough data to make a confident recommendation.',
     };
 
-    const FIT_LABEL = { green: 'Good', amber: 'Marginal', red: 'Out of range' };
+    const FIT_LABEL = { green: 'Good', amber: 'Worth trying', red: 'Won\'t fit' };
 
     function metricHtml(cssClass, label, rec, status) {
       return `
@@ -675,11 +674,11 @@
       const sizeRec  = (lf && lf !== 'red') ? recommendedSize(profile.footLen, shoe) : 'No size';
 
       const lHtml = lf
-        ? metricHtml(lf, 'Length', sizeRec, lf === 'red' ? 'Out of range' : FIT_LABEL[lf])
+        ? metricHtml(lf, 'Length', sizeRec, lf === 'red' ? "Won't fit" : FIT_LABEL[lf])
         : metricHtml('na', 'Length', '—', 'No data');
 
       const wHtml = wf
-        ? metricHtml(wf, 'Width', wf !== 'red' ? cap(widthRec || '—') : 'No option', wf === 'red' ? 'Out of range' : FIT_LABEL[wf])
+        ? metricHtml(wf, 'Width', wf !== 'red' ? cap(widthRec || '—') : 'No option', wf === 'red' ? "Won't fit" : FIT_LABEL[wf])
         : metricHtml('na', 'Width', '—', 'No data');
 
       const tHtml = tf
@@ -688,7 +687,6 @@
 
       const notes = buildNotes(shoe, profile);
       const notesHtml = notes.length ? `
-        <div class="notes-title">Fit Notes</div>
         <ul class="notes-list">
           ${notes.map(n => `<li>${n}</li>`).join('')}
         </ul>` : '';
@@ -696,13 +694,15 @@
       document.getElementById('results').innerHTML = `
         <div class="card">
           <div class="result-shoe-name">${shoe.brand} ${shoe.model}</div>
-          <span class="result-category">${shoe.category || 'shoe'}</span>
+          <div class="result-meta">
+            <span class="result-category">${shoe.category || 'shoe'}</span>
+          </div>
           <div class="metrics-label">Suggested Fit</div>
           <div class="fit-metrics">${lHtml}${wHtml}${tHtml}</div>
-          <div class="verdict-banner ${verdict}">
-            <div class="verdict-dot ${verdict}"></div>
-            <div class="verdict-text">
-              <strong>${VERDICT_LABEL[verdict]}</strong> — ${VERDICT_DESC[verdict]}
+          <div class="verdict-row">
+            <div class="verdict-pip ${verdict}"></div>
+            <div class="verdict-copy">
+              <strong>${VERDICT_LABEL[verdict]}.</strong> ${VERDICT_DESC[verdict]}
             </div>
           </div>
           ${notesHtml}
@@ -712,7 +712,7 @@
 
     function showLoading() {
       document.getElementById('results').innerHTML =
-        `<div class="card"><div class="loading">Looking up shoe data<span class="loading-dots"></span></div></div>`;
+        `<div class="card"><div class="loading">Finding your fit<span class="loading-dots"></span></div></div>`;
       document.getElementById('results').classList.add('visible');
     }
 
