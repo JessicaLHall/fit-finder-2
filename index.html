@@ -599,15 +599,18 @@
     function recommendedSize(footLen, shoe) {
       const thumbSpace = (shoe.category === 'heels') ? 8 : 10;
       const fitted = footLen + thumbSpace;
-      const eu = fitted / 6.67;
-      const rounded = shoe.halfSizes === false
-        ? Math.round(eu)
-        : Math.round(eu * 2) / 2;
+      const step = shoe.halfSizes === false ? 1 : 0.5;
+      let eu = fitted / 6.67;
+      let rounded = Math.round(eu / step) * step;
+      if (shoe.sizing === 'runs_small') rounded += step;
+      if (shoe.sizing === 'runs_large') rounded -= step;
       return 'EU\u00a0' + rounded;
     }
 
     function buildNotes(shoe, profile) {
       const notes = [];
+      if (shoe.sizing === 'runs_small') notes.push('Sized up — these shoes are known to come up small.');
+      if (shoe.sizing === 'runs_large') notes.push('Sized down — these shoes are known to come up large.');
       if (shoe.fitNote) notes.push(shoe.fitNote);
 
       const { longestToe, archType, heelWidth } = profile;
