@@ -540,7 +540,7 @@
         const shoe = await resp.json();
 
         if (shoe.error) {
-          showError("We couldn't find that shoe in our database. Try including the brand name, e.g. "Nike Air Max 90".");
+          showError("We couldn't find that shoe. Try including the brand name, e.g. Nike Air Max 90.");
         } else {
           showResults(shoe, profile);
         }
