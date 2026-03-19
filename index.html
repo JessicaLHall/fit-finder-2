@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fit Finder</title>
+  <style>
+    :root {
+      --bg: #0d0d12;
+      --surface: #16161e;
+      --border: #2a2a38;
+      --accent: #7c6cfc;
+      --accent-dim: #5a4de0;
+      --text: #e8e8f0;
+      --text-muted: #8888a8;
+      --green: #22c55e;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --green-bg: rgba(34,197,94,0.08);
+      --amber-bg: rgba(245,158,11,0.08);
+      --red-bg: rgba(239,68,68,0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      padding: 2.5rem 1rem 4rem;
+    }
+
+    .container {
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.3rem;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .card-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+    }
+
+    /* Number inputs */
+    .input-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.875rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .input-group label span {
+      font-size: 0.68rem;
+      opacity: 0.55;
+    }
+
+    .input-group input {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.6rem 0.75rem;
+      color: var(--text);
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.15s;
+      -moz-appearance: textfield;
+    }
+
+    .input-group input::-webkit-outer-spin-button,
+    .input-group input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+    }
+
+    .input-group input:focus { border-color: var(--accent); }
+    .input-group input::placeholder { color: var(--text-muted); opacity: 0.4; }
+
+    /* Toggle rows */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 0.875rem;
+      margin-bottom: 0.7rem;
+    }
+
+    .toggle-row:last-child { margin-bottom: 0; }
+
+    .toggle-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      width: 90px;
+      flex-shrink: 0;
+    }
+
+    .toggle-group {
+      display: flex;
+      gap: 0.3rem;
+    }
+
+    .toggle-btn {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.8rem;
+      padding: 0.35rem 0.8rem;
+      transition: all 0.12s;
+      line-height: 1.4;
+    }
+
+    .toggle-btn:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    .toggle-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    /* Search */
+    .search-row {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .search-row input {
+      flex: 1;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.7rem 1rem;
+      color: var(--text);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .search-row input:focus { border-color: var(--accent); }
+    .search-row input::placeholder { color: var(--text-muted); opacity: 0.4; }
+
+    .search-btn {
+      background: var(--accent);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 700;
+      padding: 0.7rem 1.25rem;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+
+    .search-btn:hover { background: var(--accent-dim); }
+
+    .search-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Results */
+    #results { display: none; }
+    #results.visible { display: block; }
+
+    .result-shoe-name {
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.4rem;
+      line-height: 1.3;
+    }
+
+    .result-category {
+      display: inline-block;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      font-size: 0.72rem;
+      padding: 0.2rem 0.6rem;
+      color: var(--text-muted);
+      text-transform: capitalize;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Fit metrics grid */
+    .metrics-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .fit-metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .fit-metric {
+      border-radius: 10px;
+      padding: 1rem 0.875rem;
+      text-align: center;
+    }
+
+    .fit-metric.green { background: var(--green-bg); border: 1px solid rgba(34,197,94,0.35); }
+    .fit-metric.amber { background: var(--amber-bg); border: 1px solid rgba(245,158,11,0.35); }
+    .fit-metric.red   { background: var(--red-bg);   border: 1px solid rgba(239,68,68,0.35); }
+    .fit-metric.na    { background: var(--bg);        border: 1px solid var(--border); opacity: 0.45; }
+
+    .metric-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .metric-rec {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+      font-variant-numeric: tabular-nums;
+      line-height: 1.3;
+    }
+
+    .metric-status {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .metric-status.green { color: var(--green); }
+    .metric-status.amber { color: var(--amber); }
+    .metric-status.red   { color: var(--red); }
+    .metric-status.na    { color: var(--text-muted); }
+
+    /* Verdict banner */
+    .verdict-banner {
+      border-radius: 8px;
+      padding: 0.875rem 1rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .verdict-banner.good       { background: var(--green-bg); border: 1px solid rgba(34,197,94,0.4); }
+    .verdict-banner.likely     { background: var(--green-bg); border: 1px solid rgba(34,197,94,0.2); }
+    .verdict-banner.borderline { background: var(--amber-bg); border: 1px solid rgba(245,158,11,0.4); }
+    .verdict-banner.poor       { background: var(--red-bg);   border: 1px solid rgba(239,68,68,0.4); }
+    .verdict-banner.unknown    { background: var(--bg);        border: 1px solid var(--border); }
+
+    .verdict-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 0.3rem;
+    }
+
+    .verdict-dot.good,
+    .verdict-dot.likely     { background: var(--green); }
+    .verdict-dot.borderline { background: var(--amber); }
+    .verdict-dot.poor       { background: var(--red); }
+    .verdict-dot.unknown    { background: var(--text-muted); }
+
+    .verdict-text { font-size: 0.875rem; line-height: 1.5; }
+    .verdict-text strong { font-weight: 700; }
+
+    /* Notes */
+    .notes-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .notes-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .notes-list li {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      padding-left: 1.25rem;
+      position: relative;
+      line-height: 1.55;
+    }
+
+    .notes-list li::before {
+      content: '·';
+      position: absolute;
+      left: 0.3rem;
+      color: var(--accent);
+      font-size: 1rem;
+    }
+
+    /* Loading */
+    .loading {
+      text-align: center;
+      color: var(--text-muted);
+      padding: 1.75rem;
+      font-size: 0.9rem;
+    }
+
+    .loading-dots::after {
+      content: '';
+      animation: dots 1.4s steps(3, end) infinite;
+    }
+
+    @keyframes dots {
+      0%   { content: ''; }
+      33%  { content: '.'; }
+      66%  { content: '..'; }
+      100% { content: '...'; }
+    }
+
+    /* Error */
+    .error-msg {
+      color: var(--red);
+      font-size: 0.875rem;
+      padding: 0.875rem 1rem;
+      background: var(--red-bg);
+      border: 1px solid rgba(239,68,68,0.35);
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Fit Finder</h1>
+    <p class="subtitle">Your foot profile, any shoe.</p>
+
+    <div class="card">
+      <div class="card-title">Your Foot Profile</div>
+      <div class="input-grid">
+        <div class="input-group">
+          <label>Length (mm)</label>
+          <input type="number" id="foot-length" placeholder="e.g. 260" min="180" max="320">
+        </div>
+        <div class="input-group">
+          <label>Width (mm)</label>
+          <input type="number" id="foot-width" placeholder="e.g. 95" min="60" max="130">
+        </div>
+        <div class="input-group">
+          <label>Circumference (mm) <span>optional</span></label>
+          <input type="number" id="foot-circ" placeholder="e.g. 235" min="180" max="310">
+        </div>
+      </div>
+      <div class="toggle-row">
+        <span class="toggle-label">Longest toe</span>
+        <div class="toggle-group" id="tg-toe">
+          <button class="toggle-btn active" data-value="big">Big</button>
+          <button class="toggle-btn" data-value="second">Second</button>
+          <button class="toggle-btn" data-value="even">Even</button>
+        </div>
+      </div>
+      <div class="toggle-row">
+        <span class="toggle-label">Arch type</span>
+        <div class="toggle-group" id="tg-arch">
+          <button class="toggle-btn" data-value="low">Low</button>
+          <button class="toggle-btn active" data-value="medium">Medium</button>
+          <button class="toggle-btn" data-value="high">High</button>
+        </div>
+      </div>
+      <div class="toggle-row">
+        <span class="toggle-label">Heel width</span>
+        <div class="toggle-group" id="tg-heel">
+          <button class="toggle-btn" data-value="narrow">Narrow</button>
+          <button class="toggle-btn active" data-value="medium">Medium</button>
+          <button class="toggle-btn" data-value="wide">Wide</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Find a Shoe</div>
+      <div class="search-row">
+        <input
+          type="text"
+          id="shoe-query"
+          placeholder="e.g. Nike Air Max 90, Clarks Desert Boot…"
+          autocomplete="off"
+        >
+        <button class="search-btn" id="search-btn">Find Fit</button>
+      </div>
+    </div>
+
+    <div id="results"></div>
+  </div>
+
+  <script>
+    const PROFILE_KEY = 'fitfinder_v2_profile';
+
+    // ── Profile ─────────────────────────────────────────────────────────────
+
+    function getProfile() {
+      return {
+        footLen:    parseFloat(document.getElementById('foot-length').value) || null,
+        footWidth:  parseFloat(document.getElementById('foot-width').value)  || null,
+        footCirc:   parseFloat(document.getElementById('foot-circ').value)   || null,
+        longestToe: getToggle('tg-toe'),
+        archType:   getToggle('tg-arch'),
+        heelWidth:  getToggle('tg-heel'),
+      };
+    }
+
+    function getToggle(groupId) {
+      const btn = document.querySelector(`#${groupId} .toggle-btn.active`);
+      return btn ? btn.dataset.value : null;
+    }
+
+    function setToggle(groupId, value) {
+      document.querySelectorAll(`#${groupId} .toggle-btn`).forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.value === value);
+      });
+    }
+
+    function saveProfile() {
+      localStorage.setItem(PROFILE_KEY, JSON.stringify(getProfile()));
+    }
+
+    function loadProfile() {
+      const raw = localStorage.getItem(PROFILE_KEY);
+      if (!raw) return;
+      try {
+        const p = JSON.parse(raw);
+        if (p.footLen)    document.getElementById('foot-length').value = p.footLen;
+        if (p.footWidth)  document.getElementById('foot-width').value  = p.footWidth;
+        if (p.footCirc)   document.getElementById('foot-circ').value   = p.footCirc;
+        if (p.longestToe) setToggle('tg-toe',  p.longestToe);
+        if (p.archType)   setToggle('tg-arch', p.archType);
+        if (p.heelWidth)  setToggle('tg-heel', p.heelWidth);
+      } catch (e) {}
+    }
+
+    ['foot-length', 'foot-width', 'foot-circ'].forEach(id =>
+      document.getElementById(id).addEventListener('input', saveProfile)
+    );
+
+    document.querySelectorAll('.toggle-group .toggle-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        this.closest('.toggle-group').querySelectorAll('.toggle-btn')
+          .forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        saveProfile();
+      });
+    });
+
+    loadProfile();
+
+    // ── Search ───────────────────────────────────────────────────────────────
+
+    document.getElementById('search-btn').addEventListener('click', doSearch);
+
+    document.getElementById('shoe-query').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') doSearch();
+    });
+
+    async function doSearch() {
+      const query = document.getElementById('shoe-query').value.trim();
+      if (!query) return;
+
+      const profile = getProfile();
+      if (!profile.footLen || !profile.footWidth) {
+        showError('Please enter your foot length and width before searching.');
+        return;
+      }
+
+      const btn = document.getElementById('search-btn');
+      btn.disabled = true;
+      btn.textContent = 'Looking up…';
+      showLoading();
+
+      try {
+        const resp = await fetch('/.netlify/functions/lookup-shoe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query }),
+        });
+
+        if (!resp.ok) throw new Error('Server error ' + resp.status);
+
+        const shoe = await resp.json();
+
+        if (shoe.error) {
+          showError(shoe.error);
+        } else {
+          showResults(shoe, profile);
+        }
+      } catch (e) {
+        showError('Could not look up this shoe. Please check your connection and try again.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Find Fit';
+      }
+    }
+
+    // ── Fit logic ────────────────────────────────────────────────────────────
+
+    function fitLength(footLen, shoe) {
+      if (!shoe.lengthRange) return null;
+      const thumbSpace = (shoe.category === 'heels') ? 8 : 10;
+      const fitted = footLen + thumbSpace;
+      const [min, max] = shoe.lengthRange;
+      if (fitted >= min && fitted <= max) return 'green';
+      if (fitted >= min - 7 && fitted <= max + 7) return 'amber';
+      return 'red';
+    }
+
+    function fitWidth(footWidth, shoe) {
+      if (!shoe.widths || Object.keys(shoe.widths).length === 0) return null;
+      for (const [, [min, max]] of Object.entries(shoe.widths)) {
+        if (footWidth >= min && footWidth <= max) return 'green';
+      }
+      for (const [, [min, max]] of Object.entries(shoe.widths)) {
+        if (footWidth >= min - 3 && footWidth <= max + 3) return 'amber';
+      }
+      return 'red';
+    }
+
+    function bestWidthOption(footWidth, shoe) {
+      if (!shoe.widths) return null;
+      let best = null, bestDist = Infinity;
+      for (const [name, [min, max]] of Object.entries(shoe.widths)) {
+        const dist = Math.abs(footWidth - (min + max) / 2);
+        if (dist < bestDist) { bestDist = dist; best = name; }
+      }
+      return best;
+    }
+
+    function fitToeBox(footCirc, longestToe, shoe) {
+      if (footCirc === null || !shoe.circumferenceRange) return null;
+      const [min, max] = shoe.circumferenceRange;
+      let fit;
+      if      (footCirc >= min && footCirc <= max)         fit = 'green';
+      else if (footCirc >= min - 5 && footCirc <= max + 5) fit = 'amber';
+      else                                                  fit = 'red';
+
+      if (shoe.toeBoxShape === 'tapered' &&
+          (longestToe === 'second' || longestToe === 'even') &&
+          fit === 'green') fit = 'amber';
+      return fit;
+    }
+
+    function overallVerdict(fits) {
+      const active = fits.filter(f => f !== null);
+      if (active.length === 0) return 'unknown';
+      if (active.includes('red')) return 'poor';
+      if (active.every(f => f === 'green')) return 'good';
+      if (active.filter(f => f === 'amber').length >= 2) return 'borderline';
+      return 'likely';
+    }
+
+    function recommendedSize(footLen, shoe) {
+      const thumbSpace = (shoe.category === 'heels') ? 8 : 10;
+      const fitted = footLen + thumbSpace;
+      const eu = fitted / 6.67;
+      const rounded = Math.round(eu * 2) / 2;
+      return 'EU\u00a0' + rounded;
+    }
+
+    function buildNotes(shoe, profile) {
+      const notes = [];
+      if (shoe.fitNote) notes.push(shoe.fitNote);
+
+      const { longestToe, archType, heelWidth } = profile;
+
+      if (shoe.toeBoxShape === 'tapered' && (longestToe === 'second' || longestToe === 'even')) {
+        notes.push('Tapered toe box may feel tight — consider sizing up or a wide option if available.');
+      }
+      if (shoe.toeBoxShape === 'round' && longestToe === 'big') {
+        notes.push('Round toe box provides good room for a prominent big toe.');
+      }
+      if (archType === 'high' && (shoe.archSupport === 'neutral' || shoe.archSupport === 'mild')) {
+        notes.push('Low arch support — consider an aftermarket insole for high arches.');
+      }
+      if (archType === 'low' && shoe.archSupport === 'high') {
+        notes.push('High arch support may feel uncomfortable for flat feet.');
+      }
+      if (heelWidth === 'narrow' && shoe.heelCupDepth === 'shallow') {
+        notes.push('Shallow heel cup may cause slipping with a narrow heel.');
+      }
+      if (heelWidth === 'wide' && shoe.heelCupDepth === 'deep') {
+        notes.push('Deep heel cup may feel restrictive for a wider heel.');
+      }
+      return notes;
+    }
+
+    // ── Render ───────────────────────────────────────────────────────────────
+
+    const VERDICT_LABEL = {
+      good: 'Good fit',
+      likely: 'Likely fit',
+      borderline: 'Borderline',
+      poor: 'Poor fit',
+      unknown: 'Unknown',
+    };
+
+    const VERDICT_DESC = {
+      good:       'All dimensions are within range.',
+      likely:     'Mostly within range — minor fit adjustment may be needed.',
+      borderline: 'Multiple dimensions are marginal — try before buying.',
+      poor:       'One or more dimensions fall outside range for your foot.',
+      unknown:    'Insufficient data to determine fit.',
+    };
+
+    const FIT_LABEL = { green: 'Good', amber: 'Marginal', red: 'Out of range' };
+
+    function metricHtml(cssClass, label, rec, status) {
+      return `
+        <div class="fit-metric ${cssClass}">
+          <div class="metric-label">${label}</div>
+          <div class="metric-rec">${rec}</div>
+          <div class="metric-status ${cssClass}">${status}</div>
+        </div>`;
+    }
+
+    function showResults(shoe, profile) {
+      const lf = fitLength(profile.footLen, shoe);
+      const wf = fitWidth(profile.footWidth, shoe);
+      const tf = fitToeBox(profile.footCirc, profile.longestToe, shoe);
+
+      const verdict = overallVerdict([lf, wf, tf]);
+      const widthRec = bestWidthOption(profile.footWidth, shoe);
+      const sizeRec  = (lf && lf !== 'red') ? recommendedSize(profile.footLen, shoe) : 'No size';
+
+      const lHtml = lf
+        ? metricHtml(lf, 'Length', sizeRec, lf === 'red' ? 'Out of range' : FIT_LABEL[lf])
+        : metricHtml('na', 'Length', '—', 'No data');
+
+      const wHtml = wf
+        ? metricHtml(wf, 'Width', wf !== 'red' ? cap(widthRec || '—') : 'No option', wf === 'red' ? 'Out of range' : FIT_LABEL[wf])
+        : metricHtml('na', 'Width', '—', 'No data');
+
+      const tHtml = tf
+        ? metricHtml(tf, 'Toe Box', cap(shoe.toeBoxShape || '—'), FIT_LABEL[tf])
+        : metricHtml('na', 'Toe Box', '—', 'No data');
+
+      const notes = buildNotes(shoe, profile);
+      const notesHtml = notes.length ? `
+        <div class="notes-title">Fit Notes</div>
+        <ul class="notes-list">
+          ${notes.map(n => `<li>${n}</li>`).join('')}
+        </ul>` : '';
+
+      document.getElementById('results').innerHTML = `
+        <div class="card">
+          <div class="result-shoe-name">${shoe.brand} ${shoe.model}</div>
+          <span class="result-category">${shoe.category || 'shoe'}</span>
+          <div class="metrics-label">Suggested Fit</div>
+          <div class="fit-metrics">${lHtml}${wHtml}${tHtml}</div>
+          <div class="verdict-banner ${verdict}">
+            <div class="verdict-dot ${verdict}"></div>
+            <div class="verdict-text">
+              <strong>${VERDICT_LABEL[verdict]}</strong> — ${VERDICT_DESC[verdict]}
+            </div>
+          </div>
+          ${notesHtml}
+        </div>`;
+      document.getElementById('results').classList.add('visible');
+    }
+
+    function showLoading() {
+      document.getElementById('results').innerHTML =
+        `<div class="card"><div class="loading">Looking up shoe data<span class="loading-dots"></span></div></div>`;
+      document.getElementById('results').classList.add('visible');
+    }
+
+    function showError(msg) {
+      document.getElementById('results').innerHTML =
+        `<div class="card"><div class="error-msg">${msg}</div></div>`;
+      document.getElementById('results').classList.add('visible');
+    }
+
+    function cap(str) {
+      return str ? str.charAt(0).toUpperCase() + str.slice(1) : str;
+    }
+  </script>
+</body>
+</html>
