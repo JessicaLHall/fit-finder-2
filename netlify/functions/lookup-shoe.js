@@ -32,12 +32,14 @@ Return ONLY valid JSON — no explanation, no markdown, no code fences — with 
   "circumferenceRange": [minMm, maxMm],
   "heelCupDepth": "shallow|medium|deep",
   "archSupport": "neutral|mild|moderate|high",
+  "halfSizes": true,
   "fitNote": "brief sentence about this shoe's fit characteristics"
 }
 
 Rules:
 - lengthRange is the internal shoe cavity length in mm spanning all available sizes (approx EU 35–48 / US 5–15)
 - widths object should include any available width options: "narrow", "standard", "wide" — omit those not offered
+- halfSizes: true if the shoe is available in half sizes, false if whole sizes only
 - all measurements in millimetres
 - if the shoe is genuinely unknown, return { "error": "Shoe not found or insufficient data" }`;
 

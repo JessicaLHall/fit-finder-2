@@ -602,7 +602,9 @@
       const thumbSpace = (shoe.category === 'heels') ? 8 : 10;
       const fitted = footLen + thumbSpace;
       const eu = fitted / 6.67;
-      const rounded = Math.round(eu * 2) / 2;
+      const rounded = shoe.halfSizes === false
+        ? Math.round(eu)
+        : Math.round(eu * 2) / 2;
       return 'EU\u00a0' + rounded;
     }
 
