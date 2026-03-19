@@ -11,8 +11,8 @@
       --surface-2: #0f1228;
       --border: #181c38;
       --border-mid: #222648;
-      --accent: #c9a96e;
-      --accent-dim: #a8863f;
+      --accent: #e8dcc8;
+      --accent-dim: #c8bca8;
       --text: #eeeef8;
       --text-muted: #8890b8;
       --text-dim: #3d4468;
@@ -190,7 +190,7 @@
       background: var(--accent);
       border: none;
       border-radius: 8px;
-      color: #1a1206;
+      color: #0b0e24;
       cursor: pointer;
       font-size: 0.83rem;
       font-weight: 800;
@@ -200,7 +200,7 @@
       letter-spacing: 0.01em;
     }
 
-    .search-btn:hover { background: var(--accent-dim); color: #fff; }
+    .search-btn:hover { background: var(--accent-dim); color: #0b0e24; }
     .search-btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
     /* Results */
@@ -229,6 +229,16 @@
       letter-spacing: 0.08em;
       color: var(--text-dim);
     }
+
+    .images-link {
+      font-size: 0.75rem;
+      color: var(--accent);
+      text-decoration: none;
+      opacity: 0.7;
+      transition: opacity 0.15s;
+    }
+
+    .images-link:hover { opacity: 1; }
 
     /* Fit metrics */
     .metrics-label {
@@ -696,6 +706,7 @@
           <div class="result-shoe-name">${shoe.brand} ${shoe.model}</div>
           <div class="result-meta">
             <span class="result-category">${shoe.category || 'shoe'}</span>
+            <a class="images-link" href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent(shoe.brand + ' ' + shoe.model)}" target="_blank" rel="noopener">See images →</a>
           </div>
           <div class="metrics-label">Suggested Fit</div>
           <div class="fit-metrics">${lHtml}${wHtml}${tHtml}</div>
