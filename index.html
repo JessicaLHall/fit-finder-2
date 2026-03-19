@@ -575,18 +575,16 @@
       return best;
     }
 
-    function fitToeBox(footCirc, longestToe, shoe) {
-      if (footCirc === null || !shoe.circumferenceRange) return null;
-      const [min, max] = shoe.circumferenceRange;
-      let fit;
-      if      (footCirc >= min && footCirc <= max)         fit = 'green';
-      else if (footCirc >= min - 5 && footCirc <= max + 5) fit = 'amber';
-      else                                                  fit = 'red';
-
-      if (shoe.toeBoxShape === 'tapered' &&
-          (longestToe === 'second' || longestToe === 'even') &&
-          fit === 'green') fit = 'amber';
-      return fit;
+    function fitToeBox(longestToe, shoe) {
+      if (!shoe.toeBoxShape) return null;
+      const shape = shoe.toeBoxShape;
+      if (shape === 'square') return 'green';
+      if (shape === 'round') return 'green';
+      if (shape === 'tapered') {
+        if (longestToe === 'second' || longestToe === 'even') return 'amber';
+        return 'green';
+      }
+      return null;
     }
 
     function overallVerdict(fits) {
@@ -667,7 +665,7 @@
     function showResults(shoe, profile) {
       const lf = fitLength(profile.footLen, shoe);
       const wf = fitWidth(profile.footWidth, shoe);
-      const tf = fitToeBox(profile.footCirc, profile.longestToe, shoe);
+      const tf = fitToeBox(profile.longestToe, shoe);
 
       const verdict = overallVerdict([lf, wf, tf]);
       const widthRec = bestWidthOption(profile.footWidth, shoe);
