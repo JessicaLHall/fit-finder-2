@@ -4,359 +4,429 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Fit Finder</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #06081a;
-      --surface: #0b0e24;
-      --surface-2: #0f1228;
-      --border: #181c38;
-      --border-mid: #222648;
-      --accent: #e8dcc8;
-      --accent-dim: #c8bca8;
-      --text: #eeeef8;
-      --text-muted: #8890b8;
-      --text-dim: #3d4468;
-      --green: #4ade80;
-      --amber: #fbbf24;
-      --red: #f87171;
+      --ff-bg:      #FAF8F4;
+      --ff-ink:     #1A1814;
+      --ff-gold:    #C9B99A;
+      --ff-border:  #D6CFC4;
+      --ff-muted:   #8A8075;
+      --ff-mid:     #5A5248;
+      --ff-success: #7A9B6E;
+      --ff-warn:    #B07B3A;
+      --ff-serif:   'Cormorant Garamond', Georgia, serif;
+      --ff-sans:    'Jost', sans-serif;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-family: var(--ff-sans);
+      font-weight: 300;
+      background: var(--ff-bg);
+      color: var(--ff-ink);
       min-height: 100vh;
-      padding: 3rem 1rem 5rem;
+      padding-bottom: 3rem;
     }
 
-    .container {
-      max-width: 580px;
-      margin: 0 auto;
+    /* --- HERO --- */
+    .ff-hero {
+      background: var(--ff-ink);
+      color: var(--ff-bg);
+      padding: 1.6rem 1.3rem 1.3rem;
+      position: relative;
+      overflow: hidden;
     }
 
-    /* Header */
-    .header {
-      margin-bottom: 2.5rem;
+    .ff-hero-pattern {
+      position: absolute;
+      inset: 0;
+      opacity: 0.04;
+      background-image: repeating-linear-gradient(45deg, var(--ff-bg) 0, var(--ff-bg) 1px, transparent 0, transparent 50%);
+      background-size: 20px 20px;
+      pointer-events: none;
     }
 
-    .header h1 {
-      font-size: 2rem;
-      font-weight: 800;
-      letter-spacing: -0.04em;
-      color: var(--text);
-      margin-bottom: 0.35rem;
-    }
-
-    .header h1 span {
-      color: var(--accent);
-    }
-
-    .header p {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
-
-    /* Cards */
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 1.25rem;
-      margin-bottom: 1rem;
-    }
-
-    .card-title {
-      font-size: 0.65rem;
-      font-weight: 700;
+    .ff-eyebrow {
+      font-family: var(--ff-sans);
+      font-weight: 200;
+      font-size: 9px;
+      letter-spacing: 0.28em;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--text-dim);
-      margin-bottom: 1rem;
+      color: var(--ff-gold);
+      margin-bottom: 0.5rem;
     }
 
-    /* Number inputs */
-    .input-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 0.75rem;
-      margin-bottom: 1rem;
-    }
-
-    .input-group label {
-      display: block;
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      margin-bottom: 0.35rem;
-    }
-
-    .input-group label em {
-      font-style: normal;
-      font-size: 0.65rem;
-      color: var(--text-dim);
-    }
-
-    .input-group input {
-      width: 100%;
-      background: var(--bg);
-      border: 1px solid var(--border-mid);
-      border-radius: 8px;
-      padding: 0.55rem 0.7rem;
-      color: var(--text);
-      font-size: 0.95rem;
-      outline: none;
-      transition: border-color 0.15s;
-      -moz-appearance: textfield;
-    }
-
-    .input-group input::-webkit-outer-spin-button,
-    .input-group input::-webkit-inner-spin-button { -webkit-appearance: none; }
-
-    .input-group input:focus { border-color: var(--accent); }
-    .input-group input::placeholder { color: var(--text-dim); }
-
-    /* Toggle rows */
-    .divider {
-      height: 1px;
-      background: var(--border);
-      margin: 0.875rem 0;
-    }
-
-    .toggle-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 0.6rem;
-    }
-
-    .toggle-row:last-child { margin-bottom: 0; }
-
-    .toggle-label {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-    }
-
-    .toggle-group {
-      display: flex;
-      gap: 0.25rem;
-    }
-
-    .toggle-btn {
-      background: transparent;
-      border: 1px solid var(--border-mid);
-      border-radius: 6px;
-      color: var(--text-muted);
-      cursor: pointer;
-      font-size: 0.78rem;
-      padding: 0.3rem 0.75rem;
-      transition: all 0.12s;
-      line-height: 1.5;
-    }
-
-    .toggle-btn:hover {
-      border-color: var(--accent);
-      color: var(--text);
-    }
-
-    .toggle-btn.active {
-      border-color: var(--accent);
-      color: var(--accent);
-      font-weight: 600;
-    }
-
-    /* Search */
-    .search-row {
-      display: flex;
-      gap: 0.6rem;
-    }
-
-    .search-row input {
-      flex: 1;
-      background: var(--bg);
-      border: 1px solid var(--border-mid);
-      border-radius: 8px;
-      padding: 0.7rem 0.9rem;
-      color: var(--text);
-      font-size: 0.9rem;
-      outline: none;
-      transition: border-color 0.15s;
-    }
-
-    .search-row input:focus { border-color: var(--accent); }
-    .search-row input::placeholder { color: var(--text-dim); }
-
-    .search-btn {
-      background: var(--accent);
-      border: none;
-      border-radius: 8px;
-      color: #0b0e24;
-      cursor: pointer;
-      font-size: 0.83rem;
-      font-weight: 800;
-      padding: 0.7rem 1.1rem;
-      transition: background 0.15s;
-      white-space: nowrap;
-      letter-spacing: 0.01em;
-    }
-
-    .search-btn:hover { background: var(--accent-dim); color: #0b0e24; }
-    .search-btn:disabled { opacity: 0.45; cursor: not-allowed; }
-
-    /* Results */
-    #results { display: none; }
-    #results.visible { display: block; }
-
-    .result-shoe-name {
-      font-size: 1.45rem;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      line-height: 1.25;
+    .ff-title {
+      font-family: var(--ff-serif);
+      font-weight: 300;
+      font-size: 2.8rem;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
       margin-bottom: 0.4rem;
     }
 
-    .result-meta {
+    .ff-title em {
+      font-style: italic;
+      color: var(--ff-gold);
+    }
+
+    .ff-hero-divider {
+      width: 36px;
+      height: 1px;
+      background: var(--ff-gold);
+      margin: 0.7rem 0;
+    }
+
+    .ff-subtitle {
+      font-size: 9px;
+      font-weight: 200;
+      letter-spacing: 0.2em;
+      color: var(--ff-muted);
+      text-transform: uppercase;
+    }
+
+    /* --- BODY --- */
+    .ff-body {
+      padding: 1.15rem 1.15rem 0;
+      max-width: 640px;
+    }
+
+    /* --- SECTION LABELS --- */
+    .ff-section-label {
+      font-family: var(--ff-sans);
+      font-weight: 200;
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--ff-muted);
+      margin-bottom: 0.65rem;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 1.25rem;
+      gap: 10px;
     }
 
-    .result-category {
-      font-size: 0.7rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-dim);
+    .ff-section-label::after {
+      content: '';
+      flex: 1;
+      height: 0.5px;
+      background: var(--ff-border);
     }
 
-    .images-link {
-      font-size: 0.75rem;
-      color: var(--accent);
-      text-decoration: none;
-      opacity: 0.7;
-      transition: opacity 0.15s;
-    }
-
-    .images-link:hover { opacity: 1; }
-
-    /* Fit metrics */
-    .metrics-label {
-      font-size: 0.65rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--text-dim);
-      margin-bottom: 0.6rem;
-    }
-
-    .fit-metrics {
+    /* --- MEASUREMENTS GRID --- */
+    .ff-measurements {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      gap: 0.6rem;
-      margin-bottom: 1.25rem;
+      gap: 1px;
+      background: var(--ff-border);
+      border: 0.5px solid var(--ff-border);
+      margin-bottom: 1rem;
     }
 
-    .fit-metric {
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      border-top: 3px solid transparent;
-      border-radius: 8px;
-      padding: 0.875rem 0.75rem 0.75rem;
-      text-align: center;
+    .ff-measure-cell {
+      background: var(--ff-bg);
+      padding: 0.65rem 0.6rem;
     }
 
-    .fit-metric.green { border-top-color: var(--green); }
-    .fit-metric.amber { border-top-color: var(--amber); }
-    .fit-metric.red   { border-top-color: var(--red); }
-    .fit-metric.na    { opacity: 0.35; }
-
-    .metric-label {
-      font-size: 0.65rem;
+    .ff-measure-label {
+      font-size: 8px;
+      letter-spacing: 0.25em;
       text-transform: uppercase;
+      color: var(--ff-muted);
+      font-weight: 300;
+      margin-bottom: 0.25rem;
+    }
+
+    .ff-measure-input {
+      font-family: var(--ff-serif);
+      font-size: 1.8rem;
+      font-weight: 300;
+      color: var(--ff-ink);
+      background: transparent;
+      border: none;
+      outline: none;
+      width: 100%;
+      padding: 0;
+      line-height: 1.2;
+      -moz-appearance: textfield;
+    }
+
+    .ff-measure-input::-webkit-outer-spin-button,
+    .ff-measure-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+    .ff-measure-input::placeholder {
+      color: var(--ff-gold);
+      font-style: italic;
+    }
+
+    .ff-measure-unit {
+      font-size: 8px;
+      color: var(--ff-muted);
       letter-spacing: 0.1em;
-      color: var(--text-dim);
-      margin-bottom: 0.45rem;
+      margin-top: 2px;
+      font-weight: 200;
     }
 
-    .metric-rec {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 0.3rem;
-      font-variant-numeric: tabular-nums;
-      line-height: 1.3;
-    }
-
-    .metric-status {
-      font-size: 0.68rem;
-      font-weight: 600;
-    }
-
-    .metric-status.green { color: var(--green); }
-    .metric-status.amber { color: var(--amber); }
-    .metric-status.red   { color: var(--red); }
-    .metric-status.na    { color: var(--text-dim); }
-
-    /* Verdict */
-    .verdict-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.65rem;
-      padding: 0.875rem 0;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 1.1rem;
-    }
-
-    .verdict-pip {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      margin-top: 0.35rem;
-    }
-
-    .verdict-pip.good,
-    .verdict-pip.likely     { background: var(--green); }
-    .verdict-pip.borderline { background: var(--amber); }
-    .verdict-pip.poor       { background: var(--red); }
-    .verdict-pip.unknown    { background: var(--text-dim); }
-
-    .verdict-copy { font-size: 0.875rem; line-height: 1.55; color: var(--text-muted); }
-    .verdict-copy strong { color: var(--text); font-weight: 700; }
-
-    /* Notes */
-    .notes-list {
-      list-style: none;
+    /* --- ATTRIBUTES --- */
+    .ff-attributes {
       display: flex;
       flex-direction: column;
-      gap: 0.45rem;
+      gap: 1px;
+      background: var(--ff-border);
+      border: 0.5px solid var(--ff-border);
+      margin-bottom: 1rem;
     }
 
-    .notes-list li {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      padding-left: 1.1rem;
-      position: relative;
-      line-height: 1.6;
+    .ff-attr-row {
+      background: var(--ff-bg);
+      display: flex;
+      align-items: center;
+      padding: 0.55rem 0.7rem;
+      gap: 1rem;
     }
 
-    .notes-list li::before {
-      content: '–';
-      position: absolute;
-      left: 0;
-      color: var(--accent);
+    .ff-attr-label {
+      font-size: 8.5px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ff-muted);
+      font-weight: 300;
+      min-width: 80px;
+      flex-shrink: 0;
     }
 
-    /* Loading */
-    .loading {
+    .ff-chip-group {
+      display: flex;
+      gap: 4px;
+    }
+
+    .ff-chip {
+      font-family: var(--ff-sans);
+      font-size: 9.5px;
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border: 0.5px solid var(--ff-border);
+      background: var(--ff-bg);
+      color: var(--ff-mid);
+      cursor: pointer;
+      transition: all 0.12s ease;
+      border-radius: 0;
+    }
+
+    .ff-chip:hover { border-color: var(--ff-muted); color: var(--ff-ink); }
+
+    .ff-chip.active {
+      background: var(--ff-ink);
+      border-color: var(--ff-ink);
+      color: var(--ff-bg);
+    }
+
+    /* --- SEARCH --- */
+    .ff-search-block { margin-bottom: 1.25rem; }
+
+    .ff-search-wrap {
+      display: flex;
+      gap: 1px;
+      background: var(--ff-border);
+      border: 0.5px solid var(--ff-border);
+    }
+
+    .ff-search-input {
+      flex: 1;
+      font-family: var(--ff-sans);
+      font-weight: 300;
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      padding: 0.55rem 0.7rem;
+      border: none;
+      outline: none;
+      background: var(--ff-bg);
+      color: var(--ff-ink);
+    }
+
+    .ff-search-input::placeholder { color: var(--ff-border); font-style: italic; }
+
+    .ff-search-btn {
+      font-family: var(--ff-sans);
+      font-weight: 300;
+      font-size: 8.5px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      padding: 0 1.15rem;
+      background: var(--ff-ink);
+      color: var(--ff-bg);
+      border: none;
+      cursor: pointer;
+      transition: background 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .ff-search-btn:hover { background: #2E2922; }
+    .ff-search-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    /* --- RESULTS --- */
+    #results { display: none; }
+    #results.visible { display: block; }
+
+    .ff-result {
+      border: 0.5px solid var(--ff-border);
+      background: var(--ff-bg);
+      overflow: hidden;
+    }
+
+    .ff-result-header {
+      background: var(--ff-ink);
+      color: var(--ff-bg);
+      padding: 0.8rem 0.8rem 0.65rem;
+    }
+
+    .ff-result-eyebrow {
+      font-size: 8px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--ff-gold);
+      margin-bottom: 0.25rem;
+    }
+
+    .ff-result-name {
+      font-family: var(--ff-serif);
+      font-size: 1.45rem;
+      font-weight: 300;
+      line-height: 1.15;
+    }
+
+    .ff-result-meta {
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      color: var(--ff-muted);
+      text-transform: uppercase;
+      margin-top: 0.2rem;
+      font-weight: 200;
+    }
+
+    .ff-result-meta a {
+      color: var(--ff-gold);
+      text-decoration: none;
+    }
+
+    .ff-result-meta a:hover { text-decoration: underline; }
+
+    /* --- VERDICT BAR --- */
+    .ff-verdict-bar {
+      display: flex;
+      gap: 1px;
+      background: var(--ff-border);
+      border-top: 1px solid var(--ff-border);
+    }
+
+    .ff-verdict-item {
+      flex: 1;
+      background: var(--ff-bg);
+      padding: 0.6rem 0.5rem;
       text-align: center;
-      color: var(--text-muted);
-      padding: 2rem;
-      font-size: 0.875rem;
     }
 
+    .ff-verdict-dim {
+      font-size: 7.5px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--ff-muted);
+      margin-bottom: 3px;
+      font-weight: 300;
+    }
+
+    .ff-verdict-val {
+      font-family: var(--ff-serif);
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: var(--ff-ink);
+      line-height: 1.2;
+    }
+
+    .ff-verdict-val.faded { color: var(--ff-border); font-style: italic; }
+
+    .ff-verdict-rating {
+      font-size: 7.5px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-top: 3px;
+      font-weight: 300;
+    }
+
+    .ff-verdict-rating.good { color: var(--ff-success); }
+    .ff-verdict-rating.warn { color: var(--ff-warn); }
+    .ff-verdict-rating.poor { color: #B05050; }
+    .ff-verdict-rating.na   { color: var(--ff-border); }
+
+    /* --- NOTES --- */
+    .ff-result-notes {
+      padding: 0.65rem 0.8rem;
+      border-top: 0.5px solid var(--ff-border);
+    }
+
+    .ff-result-status {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 0.5rem;
+    }
+
+    .ff-status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--ff-success);
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+
+    .ff-status-dot.warn { background: var(--ff-warn); }
+    .ff-status-dot.poor { background: #B05050; }
+
+    .ff-status-text {
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      color: var(--ff-ink);
+      line-height: 1.5;
+    }
+
+    .ff-note {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      margin-bottom: 5px;
+    }
+
+    .ff-note-dash {
+      font-size: 11px;
+      color: var(--ff-gold);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .ff-note-text {
+      font-size: 11.5px;
+      color: var(--ff-mid);
+      line-height: 1.6;
+      font-weight: 300;
+    }
+
+    /* --- ORNAMENT --- */
+    .ff-ornament {
+      text-align: center;
+      color: var(--ff-gold);
+      font-family: var(--ff-serif);
+      font-size: 1rem;
+      letter-spacing: 0.4em;
+      padding: 1rem 0;
+      opacity: 0.5;
+    }
+
+    /* --- LOADING / ERROR --- */
     .loading-dots::after {
       content: '';
       animation: dots 1.4s steps(3, end) infinite;
@@ -368,80 +438,81 @@
       66%  { content: '..'; }
       100% { content: '...'; }
     }
-
-    /* Error */
-    .error-msg {
-      color: var(--red);
-      font-size: 0.85rem;
-      line-height: 1.5;
-    }
   </style>
 </head>
 <body>
-  <div class="container">
 
-    <div class="header">
-      <h1>Fit <span>Finder</span></h1>
-      <p>Tell us about your feet. We'll tell you how a shoe fits.</p>
-    </div>
+  <!-- HERO -->
+  <div class="ff-hero">
+    <div class="ff-hero-pattern"></div>
+    <div class="ff-eyebrow">Precision Fit Technology</div>
+    <h1 class="ff-title">Fit <em>Finder</em></h1>
+    <div class="ff-hero-divider"></div>
+    <p class="ff-subtitle">Tell us about your feet. We'll tell you how a shoe fits.</p>
+  </div>
 
-    <div class="card">
-      <div class="card-title">Your Foot Profile</div>
-      <div class="input-grid">
-        <div class="input-group">
-          <label>Length (mm)</label>
-          <input type="number" id="foot-length" placeholder="e.g. 260" min="180" max="320">
-        </div>
-        <div class="input-group">
-          <label>Width (mm)</label>
-          <input type="number" id="foot-width" placeholder="e.g. 95" min="60" max="130">
-        </div>
-        <div class="input-group">
-          <label>Circumference <em>optional</em></label>
-          <input type="number" id="foot-circ" placeholder="e.g. 235" min="180" max="310">
-        </div>
+  <!-- BODY -->
+  <div class="ff-body">
+
+    <div style="height:1rem"></div>
+    <div class="ff-section-label">Your Measurements</div>
+    <div class="ff-measurements">
+      <div class="ff-measure-cell">
+        <div class="ff-measure-label">Length</div>
+        <input class="ff-measure-input" type="number" id="foot-length" placeholder="260" min="180" max="320">
+        <div class="ff-measure-unit">mm</div>
       </div>
-      <div class="divider"></div>
-      <div class="toggle-row">
-        <span class="toggle-label">Longest toe</span>
-        <div class="toggle-group" id="tg-toe">
-          <button class="toggle-btn active" data-value="big">Big</button>
-          <button class="toggle-btn" data-value="second">Second</button>
-          <button class="toggle-btn" data-value="even">Even</button>
-        </div>
+      <div class="ff-measure-cell">
+        <div class="ff-measure-label">Width</div>
+        <input class="ff-measure-input" type="number" id="foot-width" placeholder="95" min="60" max="130">
+        <div class="ff-measure-unit">mm</div>
       </div>
-      <div class="toggle-row">
-        <span class="toggle-label">Arch type</span>
-        <div class="toggle-group" id="tg-arch">
-          <button class="toggle-btn" data-value="low">Low</button>
-          <button class="toggle-btn active" data-value="medium">Medium</button>
-          <button class="toggle-btn" data-value="high">High</button>
-        </div>
-      </div>
-      <div class="toggle-row">
-        <span class="toggle-label">Heel width</span>
-        <div class="toggle-group" id="tg-heel">
-          <button class="toggle-btn" data-value="narrow">Narrow</button>
-          <button class="toggle-btn active" data-value="medium">Medium</button>
-          <button class="toggle-btn" data-value="wide">Wide</button>
-        </div>
+      <div class="ff-measure-cell">
+        <div class="ff-measure-label">Circumference</div>
+        <input class="ff-measure-input" type="number" id="foot-circ" placeholder="—" min="180" max="310">
+        <div class="ff-measure-unit">mm · optional</div>
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-title">Search a Shoe</div>
-      <div class="search-row">
-        <input
-          type="text"
-          id="shoe-query"
-          placeholder="Brand and model — e.g. Nike Air Max 90"
-          autocomplete="off"
-        >
-        <button class="search-btn" id="search-btn">Find My Fit</button>
+    <div class="ff-section-label">Foot Profile</div>
+    <div class="ff-attributes">
+      <div class="ff-attr-row">
+        <span class="ff-attr-label">Longest Toe</span>
+        <div class="ff-chip-group" id="tg-toe">
+          <button class="ff-chip active" data-value="big">Big</button>
+          <button class="ff-chip" data-value="second">Second</button>
+          <button class="ff-chip" data-value="even">Even</button>
+        </div>
+      </div>
+      <div class="ff-attr-row">
+        <span class="ff-attr-label">Arch Type</span>
+        <div class="ff-chip-group" id="tg-arch">
+          <button class="ff-chip" data-value="low">Low</button>
+          <button class="ff-chip active" data-value="medium">Medium</button>
+          <button class="ff-chip" data-value="high">High</button>
+        </div>
+      </div>
+      <div class="ff-attr-row">
+        <span class="ff-attr-label">Heel Width</span>
+        <div class="ff-chip-group" id="tg-heel">
+          <button class="ff-chip" data-value="narrow">Narrow</button>
+          <button class="ff-chip active" data-value="medium">Medium</button>
+          <button class="ff-chip" data-value="wide">Wide</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="ff-section-label">Search a Shoe</div>
+    <div class="ff-search-block">
+      <div class="ff-search-wrap">
+        <input class="ff-search-input" type="text" id="shoe-query" placeholder="Brand and model — e.g. Nike Air Max 90" autocomplete="off">
+        <button class="ff-search-btn" id="search-btn">Find My Fit</button>
       </div>
     </div>
 
     <div id="results"></div>
+
+    <div class="ff-ornament">· · ·</div>
 
   </div>
 
@@ -462,12 +533,12 @@
     }
 
     function getToggle(groupId) {
-      const btn = document.querySelector(`#${groupId} .toggle-btn.active`);
+      const btn = document.querySelector(`#${groupId} .ff-chip.active`);
       return btn ? btn.dataset.value : null;
     }
 
     function setToggle(groupId, value) {
-      document.querySelectorAll(`#${groupId} .toggle-btn`).forEach(btn => {
+      document.querySelectorAll(`#${groupId} .ff-chip`).forEach(btn => {
         btn.classList.toggle('active', btn.dataset.value === value);
       });
     }
@@ -494,9 +565,9 @@
       document.getElementById(id).addEventListener('input', saveProfile)
     );
 
-    document.querySelectorAll('.toggle-group .toggle-btn').forEach(btn => {
+    document.querySelectorAll('.ff-chip-group .ff-chip').forEach(btn => {
       btn.addEventListener('click', function () {
-        this.closest('.toggle-group').querySelectorAll('.toggle-btn')
+        this.closest('.ff-chip-group').querySelectorAll('.ff-chip')
           .forEach(b => b.classList.remove('active'));
         this.classList.add('active');
         saveProfile();
@@ -519,7 +590,7 @@
 
       const profile = getProfile();
       if (!profile.footLen || !profile.footWidth) {
-        showError('Pop your foot length and width in above before searching.');
+        showError('Please enter your foot length and width before searching.');
         return;
       }
 
@@ -540,12 +611,12 @@
         const shoe = await resp.json();
 
         if (shoe.error) {
-          showError("We couldn't find that shoe. Try including the brand name, e.g. Nike Air Max 90.");
+          showError('We could not find that shoe. Try including the brand name, e.g. Nike Air Max 90.');
         } else {
           showResults(shoe, profile);
         }
       } catch (e) {
-        showError('Something went wrong looking that up — please check your connection and try again.');
+        showError('Something went wrong — please check your connection and try again.');
       } finally {
         btn.disabled = false;
         btn.textContent = 'Find My Fit';
@@ -613,7 +684,7 @@
       let rounded = Math.round((fitted / 6.67) / step) * step;
       if (shoe.sizing === 'runs_small') rounded += step;
       if (shoe.sizing === 'runs_large') rounded -= step;
-      return 'EU\u00a0' + rounded;
+      return 'EU ' + rounded;
     }
 
     function buildNotes(shoe, profile) {
@@ -621,9 +692,7 @@
       if (shoe.sizing === 'runs_small') notes.push('We\'ve recommended a size up — this shoe is known to come up small.');
       if (shoe.sizing === 'runs_large') notes.push('We\'ve recommended a size down — this shoe tends to run large.');
       if (shoe.fitNote) notes.push(shoe.fitNote);
-
       const { longestToe, archType, heelWidth } = profile;
-
       if (shoe.toeBoxShape === 'tapered' && (longestToe === 'second' || longestToe === 'even')) {
         notes.push('The tapered toe box may feel snug for your toe shape — a wide option or half size up could help.');
       }
@@ -637,7 +706,7 @@
         notes.push('The built-in arch support is quite pronounced, which can feel uncomfortable on flatter feet.');
       }
       if (heelWidth === 'narrow' && shoe.heelCupDepth === 'shallow') {
-        notes.push('A shallow heel cup can cause slipping if you have a narrow heel — look for a more structured counter.');
+        notes.push('A shallow heel cup can cause slipping if you have a narrow heel.');
       }
       if (heelWidth === 'wide' && shoe.heelCupDepth === 'deep') {
         notes.push('The deep heel cup may feel tight around a wider heel.');
@@ -652,7 +721,7 @@
       likely:     'Should fit you well',
       borderline: 'Worth trying in store',
       poor:       'Unlikely to be your fit',
-      unknown:    'Not enough data to say',
+      unknown:    'Insufficient data',
     };
 
     const VERDICT_DESC = {
@@ -663,14 +732,21 @@
       unknown:    'We don\'t have enough data to make a confident recommendation.',
     };
 
-    const FIT_LABEL = { green: 'Good', amber: 'Worth trying', red: 'Won\'t fit' };
+    // map fit signal → design token class
+    const FIT_CSS = { green: 'good', amber: 'warn', red: 'poor' };
+    const FIT_LABEL = { green: 'Good', amber: 'Worth Trying', red: "Won't Fit" };
 
-    function metricHtml(cssClass, label, rec, status) {
+    const VERDICT_DOT = { good: '', likely: '', borderline: 'warn', poor: 'poor', unknown: 'warn' };
+
+    function verdictItem(dim, val, fitSignal) {
+      const cls = fitSignal ? FIT_CSS[fitSignal] : 'na';
+      const label = fitSignal ? FIT_LABEL[fitSignal] : 'No Data';
+      const valCls = fitSignal ? '' : ' faded';
       return `
-        <div class="fit-metric ${cssClass}">
-          <div class="metric-label">${label}</div>
-          <div class="metric-rec">${rec}</div>
-          <div class="metric-status ${cssClass}">${status}</div>
+        <div class="ff-verdict-item">
+          <div class="ff-verdict-dim">${dim}</div>
+          <div class="ff-verdict-val${valCls}">${val}</div>
+          <div class="ff-verdict-rating ${cls}">${label}</div>
         </div>`;
     }
 
@@ -681,55 +757,65 @@
 
       const verdict = overallVerdict([lf, wf, tf]);
       const widthRec = bestWidthOption(profile.footWidth, shoe);
-      const sizeRec  = (lf && lf !== 'red') ? recommendedSize(profile.footLen, shoe) : 'No size';
-
-      const lHtml = lf
-        ? metricHtml(lf, 'Length', sizeRec, lf === 'red' ? "Won't fit" : FIT_LABEL[lf])
-        : metricHtml('na', 'Length', '—', 'No data');
-
-      const wHtml = wf
-        ? metricHtml(wf, 'Width', wf !== 'red' ? cap(widthRec || '—') : 'No option', wf === 'red' ? "Won't fit" : FIT_LABEL[wf])
-        : metricHtml('na', 'Width', '—', 'No data');
-
-      const tHtml = tf
-        ? metricHtml(tf, 'Toe Box', cap(shoe.toeBoxShape || '—'), FIT_LABEL[tf])
-        : metricHtml('na', 'Toe Box', '—', 'No data');
+      const sizeRec  = (lf && lf !== 'red') ? recommendedSize(profile.footLen, shoe) : '—';
+      const widthVal = wf && wf !== 'red' ? cap(widthRec || '—') : '—';
+      const toeVal   = shoe.toeBoxShape ? cap(shoe.toeBoxShape) : '—';
 
       const notes = buildNotes(shoe, profile);
-      const notesHtml = notes.length ? `
-        <ul class="notes-list">
-          ${notes.map(n => `<li>${n}</li>`).join('')}
-        </ul>` : '';
+      const notesHtml = notes.map(n => `
+        <div class="ff-note">
+          <span class="ff-note-dash">—</span>
+          <span class="ff-note-text">${n}</span>
+        </div>`).join('');
+
+      const dotClass = VERDICT_DOT[verdict];
+      const imageUrl = 'https://www.google.com/search?tbm=isch&q=' + encodeURIComponent(shoe.brand + ' ' + shoe.model);
 
       document.getElementById('results').innerHTML = `
-        <div class="card">
-          <div class="result-shoe-name">${shoe.brand} ${shoe.model}</div>
-          <div class="result-meta">
-            <span class="result-category">${shoe.category || 'shoe'}</span>
-            <a class="images-link" href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent(shoe.brand + ' ' + shoe.model)}" target="_blank" rel="noopener">See images →</a>
-          </div>
-          <div class="metrics-label">Suggested Fit</div>
-          <div class="fit-metrics">${lHtml}${wHtml}${tHtml}</div>
-          <div class="verdict-row">
-            <div class="verdict-pip ${verdict}"></div>
-            <div class="verdict-copy">
-              <strong>${VERDICT_LABEL[verdict]}.</strong> ${VERDICT_DESC[verdict]}
+        <div class="ff-result">
+          <div class="ff-result-header">
+            <div class="ff-result-eyebrow">Fit Analysis</div>
+            <div class="ff-result-name">${shoe.brand} ${shoe.model}</div>
+            <div class="ff-result-meta">
+              ${shoe.category || 'shoe'} &nbsp;·&nbsp;
+              <a href="${imageUrl}" target="_blank" rel="noopener">See images →</a>
             </div>
           </div>
-          ${notesHtml}
+          <div class="ff-verdict-bar">
+            ${verdictItem('Length', sizeRec, lf)}
+            ${verdictItem('Width', widthVal, wf)}
+            ${verdictItem('Toe Box', toeVal, tf)}
+          </div>
+          <div class="ff-result-notes">
+            <div class="ff-result-status">
+              <div class="ff-status-dot ${dotClass}"></div>
+              <div class="ff-status-text"><strong>${VERDICT_LABEL[verdict]}.</strong> ${VERDICT_DESC[verdict]}</div>
+            </div>
+            ${notesHtml}
+          </div>
         </div>`;
       document.getElementById('results').classList.add('visible');
     }
 
     function showLoading() {
-      document.getElementById('results').innerHTML =
-        `<div class="card"><div class="loading">Finding your fit<span class="loading-dots"></span></div></div>`;
+      document.getElementById('results').innerHTML = `
+        <div class="ff-result">
+          <div class="ff-result-header">
+            <div class="ff-result-eyebrow">Please Wait</div>
+            <div class="ff-result-name" style="font-style:italic">Finding your fit<span class="loading-dots"></span></div>
+          </div>
+        </div>`;
       document.getElementById('results').classList.add('visible');
     }
 
     function showError(msg) {
-      document.getElementById('results').innerHTML =
-        `<div class="card"><div class="error-msg">${msg}</div></div>`;
+      document.getElementById('results').innerHTML = `
+        <div class="ff-result">
+          <div class="ff-result-header">
+            <div class="ff-result-eyebrow">Unable to Find</div>
+            <div class="ff-result-name" style="font-size:1rem;line-height:1.5;font-weight:300">${msg}</div>
+          </div>
+        </div>`;
       document.getElementById('results').classList.add('visible');
     }
 
